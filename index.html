@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive AM Modulation Simulator to visualize carrier, message, and amplitude modulated signals.">
+    <title>AM Modulation Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-wave-square wave-icon"></i>
+                <h1>AM Simulator</h1>
+            </div>
+            <div class="header-right">
+                <p>Analog Communication Educational Tool</p>
+                <div class="theme-toggle" title="Toggle Light/Dark Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <aside class="controls-panel">
+                <h2><i class="fa-solid fa-sliders"></i> Parameters</h2>
+                
+                <div class="control-group">
+                    <label>
+                        <span>Carrier Amplitude (A<sub>c</sub>)</span>
+                        <div class="val-badge"><span id="ac-val">1.0</span> V</div>
+                    </label>
+                    <input type="range" id="ac" min="0.1" max="5" step="0.1" value="1.0">
+                </div>
+                
+                <div class="control-group">
+                    <label>
+                        <span>Message Amplitude (A<sub>m</sub>)</span>
+                        <div class="val-badge"><span id="am-val">0.5</span> V</div>
+                    </label>
+                    <input type="range" id="am" min="0.1" max="5" step="0.1" value="0.5">
+                </div>
+                
+                <div class="control-group">
+                    <label>
+                        <span>Carrier Freq (f<sub>c</sub>)</span>
+                        <div class="val-badge"><span id="fc-val">20</span> Hz</div>
+                    </label>
+                    <input type="range" id="fc" min="5" max="100" step="1" value="20">
+                </div>
+                
+                <div class="control-group">
+                    <label>
+                        <span>Message Freq (f<sub>m</sub>)</span>
+                        <div class="val-badge"><span id="fm-val">2.0</span> Hz</div>
+                    </label>
+                    <input type="range" id="fm" min="0.1" max="10" step="0.1" value="2">
+                </div>
+
+                <div class="modulation-index-card">
+                    <h3>Modulation Index (μ)</h3>
+                    <div class="mu-value" id="mu-display">0.50</div>
+                    <div class="mu-status status-under" id="mu-status">Under-modulated</div>
+                    <div class="mu-bar-container">
+                        <div class="mu-bar" id="mu-bar"></div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="play-pause" class="btn primary"><i class="fa-solid fa-play"></i> Play</button>
+                    <button id="reset" class="btn secondary"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                </div>
+                
+                <div class="educational-panel">
+                    <h3><i class="fa-solid fa-book-open"></i> How it works</h3>
+                    <p><strong>Amplitude Modulation (AM)</strong> modifies the amplitude of a high-frequency carrier wave in proportion to a low-frequency message signal.</p>
+                    <div class="formula-box">
+                        <code>y(t) = [A<sub>c</sub> + A<sub>m</sub>sin(2πf<sub>m</sub>t)] × sin(2πf<sub>c</sub>t)</code>
+                    </div>
+                    <p class="small-text">When μ > 1, <strong>over-modulation</strong> occurs, causing phase reversal and envelope distortion.</p>
+                </div>
+            </aside>
+
+            <section class="graphs-panel">
+                <div class="graph-card">
+                    <div class="graph-header">
+                        <div class="graph-title">
+                            <span class="dot msg-dot"></span>
+                            <h3>Message Signal m(t)</h3>
+                        </div>
+                        <div class="tooltip" title="The baseband information signal to be transmitted."><i class="fa-solid fa-circle-info"></i></div>
+                    </div>
+                    <div id="message-plot" class="plot-container"></div>
+                </div>
+
+                <div class="graph-card">
+                    <div class="graph-header">
+                        <div class="graph-title">
+                            <span class="dot car-dot"></span>
+                            <h3>Carrier Signal c(t)</h3>
+                        </div>
+                        <div class="tooltip" title="The unmodulated high-frequency sinusoidal carrier."><i class="fa-solid fa-circle-info"></i></div>
+                    </div>
+                    <div id="carrier-plot" class="plot-container"></div>
+                </div>
+
+                <div class="graph-card large-card">
+                    <div class="graph-header">
+                        <div class="graph-title">
+                            <span class="dot am-dot"></span>
+                            <h3>AM Modulated Signal s(t)</h3>
+                        </div>
+                        <div class="tooltip" title="The resulting AM signal. The dashed lines show the message envelope shaping the carrier's peak amplitudes."><i class="fa-solid fa-circle-info"></i></div>
+                    </div>
+                    <div id="am-plot" class="plot-container"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
